@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 2. Определение структуры данных</h3>
+      <ul>
+        <li><a href="chapter2.html"> <b> 1. Создание и удаление базы данных</b></a></li>
+        <li><a href="chapter2_2.html">2. Создание и удаление таблиц</a></li>
+        <li><a href="chapter2_3.html">3. Типы данных в PostgreSQL</a></li>
+        <li><a href="chapter2_4.html">4. Ограничения столбцов и таблиц</a></li>
+        <li><a href="chapter2_5.html">5. Внешние ключи</a></li>
+        <li><a href="chapter2_6.html">6. Изменение таблиц</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Ограничения столбцов и таблиц</h1>
+      <p>
+        При определении таблиц и их столбцов в SQL мы можем использовать ряд атрибутов, которые накладывают определенные ограничения. Рассмотрим эти атрибуты.
+      </p>
+
+      <h2>PRIMARY KEY</h2>
+
+      <p>С помощью выражения <b>PRIMARY KEY</b> столбец можно сделать первичным ключом.</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL</span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">6</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">7</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span>
+            <span class="line-number">8</span> <span class="sql">)</span>
+        </pre>
+      </div>
+
+      <p>Первичный ключ уникально идентифицирует строку в таблице. В качестве первичного ключа необязательно должны выступать столбцы с типом SERIAL, они могут представлять любой другой тип.</p>
+
+      <p>Установка первичного ключа на уровне таблицы:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">6</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">7</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql-keyword">PRIMARY KEY</span><span class="sql">(Id)</span>
+            <span class="line-number">9</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Первичный ключ может быть составным (compound key). Такой ключ может потребоваться, если у нас сразу два столбца должны уникально идентифицировать строку в таблице. Например:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">OrderLines</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">OrderId </span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">ProductId</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">Quantity</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">6</span> <span class="sql">Price MONEY,</span>
+            <span class="line-number">7</span> <span class="sql-keyword">PRIMARY KEY</span><span class="sql">(OrderId, ProductId)</span>
+            <span class="line-number">8</span> <span class="sql">);</span>
+        </pre>
+      </div>    
+
+      <p>Здесь поля OrderId и ProductId вместе выступают как составной первичный ключ. То есть в таблице OrderLines не может быть двух строк, где для обоих из этих полей одновременно были бы одни и те же значения.</p>
+
+      <h2>UNIQUE</h2>
+      <p>
+        Если мы хотим, чтобы столбец имел только уникальные значения, то для него можно определить атрибут <b>UNIQUE</b>.
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql-keyword">UNIQUE</span><span class="sql">,</span>
+            <span class="line-number">7</span> <span class="sql">Phone</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql-keyword">UNIQUE</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span>
+            <span class="line-number">9</span> <span class="sql">);</span>
+        </pre>
+      </div> 
+
+      <p>
+        В данном случае столбцы, которые представляют электронный адрес и телефон, будут иметь уникальные значения. И мы не сможем добавить в таблицу две строки, у которых значения для этих столбцов будет совпадать.
+      </p>
+
+      <p>Также мы можем определить этот атрибут на уровне таблицы:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql">,</span>
+            <span class="line-number">7</span> <span class="sql">Phone</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">9</span> <span class="sql-keyword">UNIQUE</span><span class="sql">(Email, Phone)</span>
+            <span class="line-number">10</span> <span class="sql">);</span>
+        </pre>
+      </div> 
+
+      <p>Или так:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql">,</span>
+            <span class="line-number">7</span> <span class="sql">Phone</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">9</span> <span class="sql-keyword">UNIQUE</span><span class="sql">(Email)</span><span class="sql">,</span>
+            <span class="line-number">10</span> <span class="sql-keyword">UNIQUE</span><span class="sql">(Email)</span>
+            <span class="line-number">11</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <h2>NULL и NOT NULL</h2>
+
+      <p>Чтобы указать, может ли столбец принимать значение NULL, при определении столбца ему можно задать атрибут <b>NULL</b> или <b>NOT NULL</b>. Если этот атрибут явным образом не будет использован, то по умолчанию столбец будет допускать значение NULL. Исключением является тот случай, когда столбец выступает в роли первичного ключа - в этом случае по умолчанию столбец имеет значение NOT NULL.</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <h2>DEFAULT</h2>
+
+      <p>Атрибут DEFAULT определяет значение по умолчанию для столбца. Если при добавлении данных для столбца не будет предусмотрено значение, то для него будет использоваться значение по умолчанию.</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER DEFAULT</span><span class="sql">18</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Здесь для столбца Age предусмотрено значение по умолчанию 18.</p>
+
+      <h2>CHECK</h2>
+
+      <p>Ключевое слово CHECK задает ограничение для диапазона значений, которые могут храниться в столбце. Для этого после слова CHECK указывается в скобках условие, которому должен соответствовать столбец или несколько столбцов. Например, возраст клиентов не может быть меньше 0 или больше 100:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">5</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER DEFAULT</span><span class="sql">18</span><span class="sql-keyword">CHECK</span><span class="sql">(Age >0 AND Age < 100),</span>
+            <span class="line-number">7</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql-keyword">UNIQUE CHECK</span><span class="sql">(Email !=''),</span>
+            <span class="line-number">8</span> <span class="sql">Phone </span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20)</span><span class="sql-keyword">UNIQUE CHECK</span><span class="sql">(Phone !='')</span>
+            <span class="line-number">9</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Здесь также указывается, что столбцы Email и Phone <b>не</b> могут иметь пустую строку в качестве значения (пустая строка не эквивалентна значению NULL).</p>
+
+      <p>Для соединения условий используется ключевое слово <b>AND</b>. Условия можно задать в виде операций сравнения больше (>), меньше (<), не равно (!=).</p>
+
+      <p>Также с помощью CHECK можно создать ограничение в целом для таблицы:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER DEFAULT</span><span class="sql">18</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">6</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">7</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql-keyword">UNIQUE</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql">Phone </span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20)</span><span class="sql-keyword">UNIQUE</span><span class="sql">,</span>
+            <span class="line-number">9</span> <span class="sql-keyword">CHECK</span><span class="sql">((Age >0 AND Age<100) AND (Email !='') AND (Phone !=''))</span>
+            <span class="line-number">10</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <h2>Оператор CONSTRAINT. Установка имени ограничений.</h2>
+
+      <p>С помощью ключевого слова CONSTRAINT можно задать имя для ограничений. В качестве ограничений могут использоваться PRIMARY KEY, UNIQUE, CHECK.</p>
+
+      <p>Имена ограничений можно задать на уровне столбцов. Они указываются после CONSTRAINT перед атрибутами:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL </span><span class="sql-keyword">CONSTRAINT</span><span class="sql">customer_Id</span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER CONSTRAINT</span><span class="sql">customers_age_check</span><span class="sql-keyword">CHECK</span><span class="sql">(Age >0 AND Age < 100),</span>
+            <span class="line-number">5</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">7</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30)</span><span class="sql-keyword">CONSTRAINT</span><span class="sql">customers_email_key</span><span class="sql-keyword">UNIQUE</span><span class="sql">,</span>
+            <span class="line-number">8</span> <span class="sql">Phone </span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20)</span><span class="sql-keyword">CONSTRAINT</span><span class="sql">customers_email_key</span><span class="sql-keyword">UNIQUE</span>
+            <span class="line-number">9</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>В принципе необязательно задавать имена ограничений, при установке соответствующих атрибутов SQL Server автоматически определяет их имена. Но, зная имя ограничения, мы можем к нему обращаться, например, для его удаления.</p>
+
+      <p>И также можно задать все имена ограничений через атрибуты таблицы:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql">Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">7</span> <span class="sql">Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">8</span> <span class="sql">Phone </span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(20),</span>
+            <span class="line-number">9</span> <span class="sql-keyword">CONSTRAINT</span><span class="sql">customer_Id</span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">(Id),</span>
+            <span class="line-number">10</span> <span class="sql-keyword">CONSTRAINT</span><span class="sql">customers_age_check</span><span class="sql-keyword">CHECK</span><span class="sql">(Age >0 AND Age < 100),</span>
+            <span class="line-number">11</span> <span class="sql-keyword">CONSTRAINT</span><span class="sql">customers_email_key</span><span class="sql-keyword">UNIQUE</span><span class="sql">(Email),</span>
+            <span class="line-number">12</span> <span class="sql-keyword">CONSTRAINT</span><span class="sql">customers_phone_key</span><span class="sql-keyword">UNIQUE</span><span class="sql">(Phone)</span>
+            <span class="line-number">13</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Вне зависимости от того, используется оператор CONSTRAINT для создания ограничений или нет (в этом случае при установке ограничений PostgreSQL сам дает им имена), мы можем просмотреть все ограничения в pgAdmin в узле базы данных в подузле :</p>
+
+      <img src="assets/images/postgres2.1_4.png" alt="Подузел">
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter2_3.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter2_5.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

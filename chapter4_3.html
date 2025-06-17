@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 4. Запросы</h3>
+      <ul>
+        <li><a href="chapter4.html"> <b> 1. DISTINCT. Выборка уникальных значений</b></a></li>
+        <li><a href="chapter4_2.html">2. ORDER BY. Сортировка</a></li>
+        <li><a href="chapter4_3.html">3. Получение диапазона строк. LIMIT и OFFSET</a></li>
+        <li><a href="chapter4_4.html">4. Операторы фильтрации</a></li>
+        <li><a href="chapter4_4.html">5. Агрегатные функции</a></li>
+        <li><a href="chapter4_4.html">6. Группировка</a></li>
+        <li><a href="chapter4_4.html">7. Подзапросы</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Получение диапазона строк. LIMIT и OFFSET</h2>
+      <p>
+        Оператор LIMIT позволяет извлечь определенное количество строк:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ORDER BY</span><span class="sql"> ProductName</span>
+            <span class="line-number">3</span> <span class="sql">LIMIT 4;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.1_3.png" alt="LIMIT">
+
+      <p>
+        Оператор <b>OFFSET</b> позволяет указать, с какой строки надо начинать выборку. Например, выберем 3 строки, начиная со 2-й:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ORDER BY</span><span class="sql"> ProductName</span>
+            <span class="line-number">3</span> <span class="sql">LIMIT 3 OFFSET 2;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.2_3.png" alt="OFFSET">
+
+      <p>
+        Если нам надо выбрать вообще все строки, начиная с какой-то определенной, то оператор LIMIT можно опустить: 
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ORDER BY</span><span class="sql"> ProductName</span>
+            <span class="line-number">3</span> <span class="sql">OFFSET 2;</span>
+        </pre>
+      </div>
+
+      <p>Либо после LIMIT указать ключевое слово ALL:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ORDER BY</span><span class="sql"> ProductName</span>
+            <span class="line-number">3</span> <span class="sql">LIMIT ALL OFFSET 2;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter4_2.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter4_4.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

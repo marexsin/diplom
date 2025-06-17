@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 1. Введение в PostgreSQL</h3>
+      <ul>
+        <li><a href="chapter1.html"> <b> 1. Что такое PostgreSQL? Установка сервера</b></a></li>
+        <li><a href="chapter1_2.html">2. Графический клиент pgAdmin</a></li>
+        <li><a href="chapter1_3.html">3. Запросы SQL в pgAdmin</a></li>
+        <li><a href="chapter1_4.html">4. Консольный клиент psql</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Графический клиент pgAdmin</h1>
+      <p>
+        Для упрощения администрирования на сервере postgresql в базовый комплект установки входит такой инструмент как pgAdmin. Он представляет графический клиент для работы с сервером, через который мы в удобном виде можем создавать, удалять, изменять базы данных и управлять ими. Так, на Windows после установки мы можем найти значок pgAdmin в меню Пуск и запустить его:
+      </p>
+
+      <img src="assets/images/postgres1_2.png" alt="Пуск" class="screenshot" />
+
+      <p>После этого нам откроется следующая программа pgAdmin. При открытии также отображится окно для ввода пароля для подключения к серверу Postgres:</p>
+
+      <img src="assets/images/postgres2_2.png" alt="pgAdmin" class="screenshot" />
+
+      <p>Здесь необходимо ввести пароль для суперпользователя postgres, который был задан при установке PostgreSQL.</p>
+
+      <p>После успешного логина нам откроется содержимое сервера:</p>
+
+      <img src="assets/images/postgres3_2.png" alt="Cодержимое сервера"/>
+
+      <p>В частности, в узле Databases мы можем увидеть все имеющиеся базы данных. По умолчанию здесь есть только одна база данных - postgres.</p>
+
+      <p>Также в правой части мы можем увидеть узел Login/Group Roles, который предназначен для управления пользователями и их ролями.</p>
+
+      <p>И третий узел - Tablespaces позволяет управлять местом хранения файлов баз данных.</p>
+
+      <p>Теперь создадим свою базу данных. Для этого нажмем правой кнопкой мыши на узел Databases. И далее в контекстном меню выберем Create->Database...</p>
+
+      <img src="assets/images/postgres4_2.png" alt="Create->Database"/>
+
+      <p>После этого нам отобразится окно для создания базы данных. Введем название для БД, например, test1 и нажмем на кнопку "Save":</p>
+
+      <img src="assets/images/postgres5_2.png" alt="Cозданиe базы данных"/>
+
+      <p>После этого в древовидном меню слева отобразится содержимое созданной базы данных test1:</p>
+
+      <img src="assets/images/postgres6_2.png" alt="Cодержимое"/>
+
+    </main>
+  </div>
+
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter1.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter1_3.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

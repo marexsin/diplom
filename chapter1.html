@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 1. Введение в PostgreSQL</h3>
+      <ul>
+        <li><a href="chapter1.html"> <b> 1. Что такое PostgreSQL? Установка сервера</b></a></li>
+        <li><a href="chapter1_2.html">2. Графический клиент pgAdmin</a></li>
+        <li><a href="chapter1_3.html">3. Запросы SQL в pgAdmin</a></li>
+        <li><a href="chapter1_4.html">4. Консольный клиент psql</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Что такое PostgreSQL. Установка сервера</h1>
+      <h2><a href="#">Что такое PostgreSQL. Установка сервера</a></h2>
+      <p>
+        PostgreSQL является одной из наиболее популярных систем управления базами данных. Сам проект postgresql эволюционировал из другого проекта, который назывался Ingres. Формально развитие postgresql началось еще в 1986 году. 
+      </p>
+      <p>
+        Тогда он назывался POSTGRES. А в 1996 году проект был переименован в PostgreSQL, что отражало больший акцент на SQL. И собственно 8 июля 1996 года состоялся первый релиз продукта.
+      </p>
+      <p>
+        PostgreSQL поддерживается для всех основных операционных систем - Windows, Linux, MacOS.
+      </p>
+      <p>
+        Официальный сайт проекта: <a href="https://www.postgresql.org/">https://www.postgresql.org/</a>
+      </p>
+      <p>
+        PostgreSQL развивается как opensource. Исходный код проекта можно найти в репозитории на гитхабе по адресу:
+        <a href="https://github.com/postgres/postgres">https://github.com/postgres/postgres</a>
+      </p>
+
+      <h3>Установка</h3>
+      <p>
+        На странице <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a> 
+        можно найти ссылки на загрузку различных дистрибутивов для различных операционных систем. В частности, для загрузки дистрибутива для Windows, а также для MacOS надо перейти на страницу <a href="https://www.enterprisedb.com/downloads/postgres-postgresql-downloads"> https://www.enterprisedb.com/downloads/postgres-postgresql-downloads</a> и указать все необходимые опции для загрузки: версию postgres и операционную систему. В моем случае ОС - Windows 10 64х, поэтому я выбираю соответствующий пункт- Windows x86-64
+      </p>
+
+      <img src="assets/images/postgres1.png" alt="Инструкция по установке PostgreSQL" class="screenshot" />
+
+      <p>Тут же можно найти дитрибутивы и для других систем.</p>
+
+      <p>Запустим программу установки:</p>
+
+      <img src="assets/images/postgres2.png" alt="Установка EDB PostgreSQL" class="screenshot" />
+
+      <p>На следующем экране необходимо будет указать папку для установки. Оставим папку по умолчанию и перейдем к следующему шагу:</p>
+
+      <img src="assets/images/postgres3.png" alt="Папка для установки"/>
+
+      <p>Далее будет предложено выбрать компоненты для установки:</p>
+
+      <img src="assets/images/postgres4.png" alt="Компоненты для установки"/>
+
+      <p>Оставим все компоненты по умолчанию и перейдем к следующему шагу. Далее будет предложено выбрать папку, где будут храниться базы данных:</p>
+
+      <img src="assets/images/postgres5.png" alt="Папка для базы данных"/>
+
+      <p>Оставим путь по умолчанию и перейдем к следующему шагу. Затем необходимо будет установить пароль для суперпользователя postgres:</p>
+
+      <img src="assets/images/postgres6.png" alt="Пароль для суперпользователя postgres"/>
+
+      <p>При установке запомним пароль, так как он потребуется для подключения к серверу. Затем нужно будет установить порт, по которому будет запускаться сервер. Можно оставить порт по умолчанию:</p>
+
+      <img src="assets/images/postgres7.png" alt="Порт для сервера"/>
+
+      <p>Далее можно будет установить локаль сервера. Оставим установку по умолчанию:</p>
+
+      <img src="assets/images/postgres8.png" alt="Локаль сервера"/>
+
+      <p>После этого мы увидим сводку по всем настройкам:</p>
+
+      <img src="assets/images/postgres9.png" alt="Cводка по всем настройкам"/>
+
+      <p>И если нас все устраивает, то можно нажать на кнопку Next, и начнется установка</p>
+
+      <img src="assets/images/postgres10.png" alt="Установка"/>
+
+      <p>И после завершения установки мы увидем следующее окно, и для выхода нажмем на кнопку Finish:</p>
+
+      <img src="assets/images/postgres11.png" alt="Finish"/>
+
+      <p>Таким образом, сервер PostgreSQL установлен, и мы можем начинать с ним работать.</p>
+
+    </main>
+  </div>
+
+
+  <div class="transition">
+    <button class="next" onclick="location.href='index.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter1_2.html'">Дальше →</button>
+  </div>
+  
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

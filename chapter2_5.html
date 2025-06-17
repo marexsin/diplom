@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 2. Определение структуры данных</h3>
+      <ul>
+        <li><a href="chapter2.html"> <b> 1. Создание и удаление базы данных</b></a></li>
+        <li><a href="chapter2_2.html">2. Создание и удаление таблиц</a></li>
+        <li><a href="chapter2_3.html">3. Типы данных в PostgreSQL</a></li>
+        <li><a href="chapter2_4.html">4. Ограничения столбцов и таблиц</a></li>
+        <li><a href="chapter2_5.html">5. Внешние ключи</a></li>
+        <li><a href="chapter2_6.html">6. Изменение таблиц</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Внешние ключи</h1>
+      <p>
+        Для связи между таблицами применяются внешние ключи. Внешний ключ устанавливается для столбца из зависимой, подчиненной таблицы (referencing table), и указывает на один из столбцов из главной таблицы (referenced table). Как правило, внешний ключ указывает на первичный ключ из связанной главной таблицы.
+      </p>
+
+      <p>Общий синтаксис установки внешнего ключа на уровне столбца:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">REFERENCES</span><span class="sql"> главная_таблица (столбец_главной_таблицы)</span>
+            <span class="line-number">2</span> <span class="sql">    [</span><span class="sql-keyword"> ON DELETE</span><span class="sql"> {</span><span class="sql-keyword">CASCADE</span><span class="sql">|</span><span class="sql-keyword">RESTRICT</span><span class="sql">}]</span>
+            <span class="line-number">3</span> <span class="sql">    [</span><span class="sql-keyword"> ON UPDATE</span><span class="sql"> {</span><span class="sql-keyword">CASCADE</span><span class="sql">|</span><span class="sql-keyword">RESTRICT</span><span class="sql">}]</span>
+        </pre>
+      </div>
+
+      <p>Чтобы установить связь между таблицами, после ключевого слова <b>REFERENCES</b> указывается имя связанной таблицы и далее в скобках имя столбца из этой таблицы, на который будет указывать внешний ключ. После выражения REFERENCES может идти выражение <b>ON DELETE</b> и <b>ON UPDATE</b>, которые уточняют поведение при удалении или обновлении данных.</p>
+
+      <p>Общий синтаксис установки внешнего ключа на уровне таблицы:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">FOREIGN KEY</span><span class="sql"> (стобец1, столбец2, ... столбецN)</span>
+            <span class="line-number">2</span> <span class="sql-keyword">    REFERENCES</span><span class="sql"> главная_таблица (столбец_главной_таблицы1, столбец_главной_таблицы2, ... столбец_главной_таблицыN)</span>
+            <span class="line-number">3</span> <span class="sql">    [</span><span class="sql-keyword"> ON UPDATE</span><span class="sql"> {</span><span class="sql-keyword">CASCADE</span><span class="sql">|</span><span class="sql-keyword">RESTRICT</span><span class="sql">}]</span>
+            <span class="line-number">4</span> <span class="sql">    [</span><span class="sql-keyword"> ON UPDATE</span><span class="sql"> {</span><span class="sql-keyword">CASCADE</span><span class="sql">|</span><span class="sql-keyword">RESTRICT</span><span class="sql">}]</span>
+        </pre>
+      </div>
+
+      <p>Например, определим две таблицы и свяжем их посредством внешнего ключа:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql-keyword">    Age</span><span class="sql"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql-keyword">    FirstName</span><span class="sql"> VARCHAR</span><span class="sql">(20) NOT NULL</span>
+            <span class="line-number">6</span> <span class="sql">);</span>
+            <span class="line-number">7</span> <span class="sql"></span>
+            <span class="line-number">8</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Orders</span>
+            <span class="line-number">9</span> <span class="sql">(</span>
+            <span class="line-number">10</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">11</span> <span class="sql-keyword">    CustomerId</span><span class="sql"> INTEGER REFERENCES</span><span class="sql"> Customers (Id),</span>
+            <span class="line-number">12</span> <span class="sql-keyword">    Quantity</span><span class="sql"> INTEGER</span>
+            <span class="line-number">13</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Здесь определены таблицы Customers и Orders. Customers является главной и представляет клиента. Orders является зависимой и представляет заказ, сделанный клиентом. Эта таблица через столбец CustomerId связана с таблицей Customers и ее столбцом Id. То есть столбец CustomerId является внешним ключом, который указывает на столбец Id из таблицы Customers.</p>
+
+      <p>Определение внешнего ключа на уровне таблицы выглядело бы следующим образом:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    Age</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">    FirstName</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(20) NOT NULL</span>
+            <span class="line-number">6</span> <span class="sql">);</span>
+            <span class="line-number">7</span> <span class="sql"></span>
+            <span class="line-number">8</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Orders</span>
+            <span class="line-number">9</span> <span class="sql">(</span>
+            <span class="line-number">10</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">11</span> <span class="sql">    CustomerId</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">12</span> <span class="sql">    Quantity</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">13</span> <span class="sql-keyword">    FOREIGN KEY</span><span class="sql"> (CustomerId)</span><span class="sql-keyword"> REFERENCES</span><span class="sql"> Customers (Id)</span>
+            <span class="line-number">14</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <h2>ON DELETE и ON UPDATE</h2>
+
+      <p>С помощью выражений <b>ON DELETE</b> и <b>ON UPDATE</b> можно установить действия, которые выполняются соответственно при удалении и изменении связанной строки из главной таблицы. Для установки подобного действия можно использовать следующие опции:</p>
+
+      <ul>
+        <li><b>CASCADE:</b> автоматически удаляет или изменяет строки из зависимой таблицы при удалении или изменении связанных строк в главной таблице.</li>
+        <li><b>RESTRICT:</b> предотвращает какие-либо действия в зависимой таблице при удалении или изменении связанных строк в главной таблице. То есть фактически какие-либо действия отсутствуют.</li>
+        <li><b>NO ACTION:</b> действие по умолчанию, предотвращает какие-либо действия в зависимой таблице при удалении или изменении связанных строк в главной таблице. И генерирует ошибку. В отличие от RESTRICT выполняет отложенную проверку на связанность между таблицами.</li>
+        <li><b>SET NULL:</b> при удалении связанной строки из главной таблицы устанавливает для столбца внешнего ключа значение NULL.</li>
+        <li><b>SET DEFAULT:</b> при удалении связанной строки из главной таблицы устанавливает для столбца внешнего ключа значение по умолчанию, которое задается с помощью атрибуты DEFAULT. Если для столбца не задано значение по умолчанию, то в качестве него применяется значение NULL.</li>
+      </ul>
+
+      <h2>Каскадное удаление</h2>
+
+      <p>По умолчанию, если на строку из главной таблицы по внешнему ключу ссылается какая-либо строка из зависимой таблицы, то мы не сможем удалить эту строку из главной таблицы. Вначале нам необходимо будет удалить все связанные строки из зависимой таблицы. И если при удалении строки из главной таблицы необходимо, чтобы были удалены все связанные строки из зависимой таблицы, то применяется каскадное удаление, то есть опция <b>CASCADE:</b></p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Orders</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    CustomerId</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">    Quantity</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">6</span> <span class="sql-keyword">    FOREIGN KEY</span><span class="sql"> (CustomerId)</span><span class="sql-keyword"> REFERENCES</span><span class="sql"> Customers (Id)</span><span class="sql-keyword"> ON DELETE CASCADE</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Аналогично работает выражение <b>ON UPDATE CASCADE</b>. При изменении значения первичного ключа автоматически изменится значение связанного с ним внешнего ключа. Но так как первичные ключи, как правило, изменяются очень редко, да и с принципе не рекомендуется использовать в качестве первичных ключей столбцы с изменяемыми значениями, то на практике выражение <b>ON UPDATE</b> используется редко.</p>
+
+      <h2>Установка NULL</h2>
+      <p>
+        При установки для внешнего ключа опции <b>SET NULL</b> необходимо, чтобы столбец внешнего ключа допускал значение NULL:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Orders</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    CustomerId</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">5</span> <span class="sql">    Quantity</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">6</span> <span class="sql-keyword">    FOREIGN KEY</span><span class="sql"> (CustomerId)</span><span class="sql-keyword"> REFERENCES</span><span class="sql"> Customers (Id)</span><span class="sql-keyword"> ON DELETE SET</span><span class="sql"> NULL</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <h2>Установка значения по умолчанию</h2>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Orders</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    CustomerId</span><span class="sql-keyword"> INTEGER DEFAULT</span><span class="sql"> 1,</span>
+            <span class="line-number">5</span> <span class="sql">    Quantity</span><span class="sql-keyword"> INTEGER</span><span class="sql">,</span>
+            <span class="line-number">6</span> <span class="sql-keyword">    FOREIGN KEY</span><span class="sql"> (CustomerId)</span><span class="sql-keyword"> REFERENCES</span><span class="sql"> Customers (Id)</span><span class="sql-keyword"> ON DELETE SET DEFAULT</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>
+        Если для столца значение по умолчанию не задано через параметр DEFAULT, то в качестве такового используется значение NULL (если столбец допускает NULL).
+      </p>
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter2_4.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter2_6.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    margin: 0;
+    padding: 10px;
+}
+header {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 30px;
+      background-image: url(../images/fon.png);
+      align-items: center;
+    }
+
+    header a {
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      text-decoration: none;
+      margin-left: 10px;
+
+    }
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 90px;
+    margin-bottom: 90px;
+}
+
+.quiz-box {
+    background-color: #fff;
+    border: 2px solid #4a90e2;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+.options label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+button {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #357ab8;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.result {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+footer {
+      background-image: url(../images/fon.png);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }

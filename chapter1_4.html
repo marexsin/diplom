@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 1. Введение в PostgreSQL</h3>
+      <ul>
+        <li><a href="chapter1.html"> <b> 1. Что такое PostgreSQL? Установка сервера</b></a></li>
+        <li><a href="chapter1_2.html">2. Графический клиент pgAdmin</a></li>
+        <li><a href="chapter1_3.html">3. Запросы SQL в pgAdmin</a></li>
+        <li><a href="chapter1_4.html">4. Консольный клиент psql</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Консольный клиент psql</h1>
+      <p>
+        Консольный клиент psql представляет еще один способ взаимодействия с сервером PostgreSQL. Данная программа также, как и pgAdmin, позволяет выполнять команды языка SQL.
+      </p>
+
+      <img src="assets/images/postgres1_4.png" alt="Консольный клиент psql" class="screenshot" />
+
+      <p>Запустим psql. Программа предложит ввести название сервера, базы данных, порта и пользователя. Эти пункты можно прощелкать, так как для них будут использоваться значения по умолчанию (для сервера - localhost, для базы данных - postgres, для порта - 5432, в качестве пользователя - суперпользователь postres). Далее надо будет ввести пароль для пользователя (по умолчанию пользователя postgres):</p>
+
+      <img src="assets/images/postgres2_4.png" alt="Пароль для пользователя" class="screenshot" />
+
+      <p>И после удачного подключения можно будет отправлять серверу команды через psql.</p>
+
+      <p>Теперь создадим базу данных с помощью следующей команды языка SQL:</p>
+
+      <div class="black">
+        <p>create database test2;</p>
+      </div>
+
+      <p>Для создания базы данных применяется команда create database, после которой указывается название бд. То есть в данном случае название бд - "test2". Причем команда завершается точкой с запятой.</p>
+
+      <p>Далее подключимся к этой базе данных для осуществления с ней взаимодействия. Для этого применяется команда \c (сокращение от connect), после которой указывается имя базы данных:</p>
+
+      <div class="black">
+        <p>\c test2</p>
+      </div>
+
+      <p>Затем создадим в этой базе данных таблицу с помощью команды:</p>
+
+      <div class="black">
+        <p>create table users (Id serial primary key, Name character varying(30), Age integer);</p>
+      </div>
+
+      <p>Данная команда создает таблицу users, в которой будет три столбца - Id, Name и Age.</p>
+
+      <img src="assets/images/postgres3_4.png" alt="Команды"/>
+
+      <p>После этого мы можем добавлять и получать данные из выше созданной таблицы. Вначале добавим в таблицу одну строку с помощью следующей команды:</p>
+
+      <div class="black">
+        <p>insert into users (Name, Age) values ('Tom', 33);</p>
+      </div>
+
+      <p>И в конце получим добавленные данные:</p>
+
+      <div class="black">
+        <p>select * from users;</p>
+      </div>
+
+      <img src="assets/images/postgres4_4.png" alt="Данные">
+
+      <p>Стоит отметить, что по умолчанию консоль в Windows поддерживает кодировку CP866, тогда как базы данных могут работать совсем с другой кодировкой, например, 1251. И даже сам клиент psql выводит нам соответствующие сообщения. Кроме того, при получении данных, при выводе информации о базах данных, таблицы и т.д. некоторая информация может отображаться некорректно. В этом случае перед запуском psql надо установить нужную кодировку и затем из консоли запустить программу psql.</p>
+
+    </main>
+  </div>
+
+  <div class="button">
+    <button class="test" onclick="location.href='test1.html'">ПРОЙТИ ТЕСТ</button>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter1_3'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter2.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

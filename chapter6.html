@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 6. Соединение таблиц</h3>
+      <ul>
+        <li><a href="chapter6.html"> <b> 1. Неявное соединение таблиц</b></a></li>
+        <li><a href="chapter6_2.html">2. INNER JOIN</a></li>
+        <li><a href="chapter6_3.html">3. OUTER JOIN и CROSS JOIN</a></li>
+        <li><a href="chapter6_4.html">4. Группировка в соединениях</a></li>
+        <li><a href="chapter6_5.html">5. Объединение множеств. UNION</a></li>
+        <li><a href="chapter6_6.html">6. Разность множеств. EXCEPT</a></li>
+        <li><a href="chapter6_7.html">7. Пересечение множеств. INTERSECT</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Соединение таблиц</h1>
+      <h2>Неявное соединение таблиц</h2>
+      <p>
+        Нередко возникает ситуация, когда нам надо получить данные из нескольких таблиц. Для соединения данных из разных таблиц можно использовать команду SELECT. Например, пусть имеются следующие таблицы, которые связаны между собой связями:
+      </p>
+
+      <p>
+        В данном случае таблицы Customers и Products связаны с таблицей Orders связью один ко многим. Таблица Orders в виде внешних ключей ProductId и CustomerId содержит ссылки на столбцы Id из соответственно таблиц Products и Customers. Также она хранит количество купленного товара (ProductCount) и и по какой цене он был куплен (Price). И кроме того, таблицы также хранит в виде столбца CreatedAt дату покупки.
+      </p>
+
+      <p>
+        Пусть эти таблицы будут содержать следующие данные:
+      </p>
+
+
+      <p>Теперь соединим две таблицы Orders и Customers:</p>
+
+
+      <p>При такой выборке для каждая строка из таблицы Orders будет совмещаться с каждой строкой из таблицы Customers. То есть, получится перекрестное соединение. Например, в Orders три строки, а в Customers то же три строки, значит мы получим 3 * 3 = 9 строк:</p>
+
+      <img src="assets/images/postgres6.1_1.png" alt="Cоединение таблиц">
+
+      <p>То есть в данном случае мы получаем прямое (декартово) произведение двух групп. Однако вряд ли такой результат можно назвать желаемым. Тем более каждый заказ из Orders связан с конкретным покупателем из Customers, а не со всеми возможными покупателями.</p>
+
+      <p>Для решения этой задачи необходимо использовать выражение WHERE и фильтровать строки при условии, что поле CustomerId из Orders соответствует полю Id из Customers:</p>
+
+
+      <img src="assets/images/postgres6.2_1.png" alt="фильтр строк">
+
+      <p>Теперь объединим данные по трем таблицам Orders, Customers и Proucts. То есть получим все заказы и добавим информацию по клиенту и связанному товару:</p>
+
+
+      <p>Так как здесь соединяются три таблицы, то необходимо применить как минимум два условия. Ключевой таблицей остается Orders, из которой извлекаются все заказы, а затем к ней подсоединяются данные по клиенту по условию <i>Orders.CustomerId = Customers.Id</i> и данные по товару по условию <i>Orders.ProductId=Products.Id</i></p>
+
+      <img src="assets/images/postgres6.3_1.png" alt="Данные по товару по условию">
+
+      <p>Поскольку в данном случае названия таблиц сильно увеличивают код, то мы его можем сократить за счет использования псевдонимов таблиц:</p>
+
+
+      <p>Если необходимо при использовании псевдонима выбрать все столбцы из определенной таблицы, то можно использовать звездочку:</p>
+
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter5_2.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter6_2.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

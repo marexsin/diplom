@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 3. Операции с данными</h3>
+      <ul>
+        <li><a href="chapter3.html"> <b> 1. Добавление данных. Команда Insert</b></a></li>
+        <li><a href="chapter3_2.html">2. Получение данных. Команда Select</a></li>
+        <li><a href="chapter3_3.html">3. Фильтрация. WHERE</a></li>
+        <li><a href="chapter3_4.html">4. Обновление данных. Команда UPDATE</a></li>
+        <li><a href="chapter3_5.html">5. Удаление данных. Команда DELETE</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Получение данных. Команда Select</h2>
+      <p>
+        Для извлечения данных из БД применяется команда SELECT. В упрощенном виде она имеет следующий синтаксис:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> список_столбцов</span><span class="sql-keyword"> FROM</span><span class="sql"> имя_таблицы </span>
+        </pre>
+      </div>
+
+      <p>
+        Например, пусть ранее была создана таблица Products, и в нее добавлены некоторые начальные данные:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    ProductName</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(30) NOT NULL,</span>
+            <span class="line-number">5</span> <span class="sql">    Manufacturer</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">    ProductCount</span><span class="sql-keyword"> INTEGER DEFAULT</span><span class="sql"> 0,</span>
+            <span class="line-number">7</span> <span class="sql">    Price</span><span class="sql-keyword"> NUMERIC</span>
+            <span class="line-number">8</span> <span class="sql">);</span>
+            <span class="line-number">9</span> <span class="sql"></span>
+            <span class="line-number">10</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products (ProductName, Manufacturer, ProductCount, Price)</span>
+            <span class="line-number">11</span> <span class="sql-keyword">VALUES</span>
+            <span class="line-number">12</span> <span class="sql">(<span style="color: red;">'iPhone X'</span>, <span style="color: red;">'Apple'</span>, 3, 36000),</span>
+            <span class="line-number">13</span> <span class="sql">(<span style="color: red;">'iPhone 8'</span>, <span style="color: red;">'Apple'</span>, 2, 41000),</span>
+            <span class="line-number">14</span> <span class="sql">(<span style="color: red;">'Galaxy S9'</span>, <span style="color: red;">'Samsung'</span>, 2, 46000),</span>
+            <span class="line-number">15</span> <span class="sql">(<span style="color: red;">'Galaxy S8 Plus'</span>, <span style="color: red;">'Samsung'</span>, 1, 56000),</span>
+            <span class="line-number">16</span> <span class="sql">(<span style="color: red;">'Desire 12'</span>, <span style="color: red;">'HTC'</span>, 5, 28000),</span>
+        </pre>
+      </div>
+
+      <p>
+        Получим все объекты из этой таблицы:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <p>Символ звездочка * указывает, что нам надо получить все столбцы.</p>
+
+      <img src="assets/images/postgres3.1_2.png" alt="*">
+
+      <p>Однако использование символа звездочки * считается не очень хорошей практикой, так как, как правило, не все столбцы бывают нужны. И более оптимальный подход заключается в указании всех необходимых столбцов после слова SELECT. Исключение составляет тот случай, когда надо получить данные по абсолютно всем столбцам таблицы. Также использование символа * может быть предпочтительно в таких ситуациях, когда в точности не известны названия столбцов.</p>
+
+      <p>Если нам надо получить данные не по всем, а по каким-то конкретным столбцам, то тогда все эти спецификации столбцов перечисляются через запятую после SELECT:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> ProductName, Price</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.2_2.png" alt="SELECT">
+
+      <p>Спецификация столбца необязательно должна представлять его название. Это может быть любое выражение, например, результат арифметической операции. Так, выполним следующий запрос:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> ProductCount, Manufacturer, Price * ProductCount</span>
+            <span class="line-number">2</span> <span class="sql-keyword">FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <p>Здесь при выборке будут создаваться три столбца. Причем третий столбец представляет значение столбца Price, умноженное на значение столбца ProductCount, то есть совокупную стоимость товара.</p>
+
+      <p>С помощью оператора <b>AS</b> можно изменить название выходного столбца или определить его псевдоним:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> ProductCount</span><span class="sql-keyword"> AS</span><span class="sql"> Title,</span>
+            <span class="line-number">2</span> <span class="sql">Manufacturer,</span>
+            <span class="line-number">3</span> <span class="sql">Price * ProductCount</span><span class="sql-keyword"> AS</span><span class="sql"> TotalSum</span>
+            <span class="line-number">4</span> <span class="sql-keyword">FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <p>В данном случае результатом выборки являются данные по 3-м столбцам. Для первого столбца определяется псевдоним Title, хотя в реальности он будет представлять столбец ProductName. Второй столбец сохраняет свое название - Manufacturer. Третий столбец TotalSum хранит произведение столбцов ProductCount и Price.</p>
+
+      <img src="assets/images/postgres3.3_2.png" alt="TotalSum">
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter3.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter3_3.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

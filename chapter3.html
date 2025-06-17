@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 3. Операции с данными</h3>
+      <ul>
+        <li><a href="chapter3.html"> <b> 1. Добавление данных. Команда Insert</b></a></li>
+        <li><a href="chapter3_2.html">2. Получение данных. Команда Select</a></li>
+        <li><a href="chapter3_3.html">3. Фильтрация. WHERE</a></li>
+        <li><a href="chapter3_4.html">4. Обновление данных. Команда UPDATE</a></li>
+        <li><a href="chapter3_5.html">5. Удаление данных. Команда DELETE</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Операции с данными</h1>
+      <h2><a href="#">Добавление данных. Команда Insert</a></h2>
+      <p>
+        Для добавления данных применяется команда INSERT, которая имеет следующий формальный синтаксис:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> имя_таблицы (столбец1, столбец2, ... столбецN)</span>
+            <span class="line-number">2</span> <span class="sql-keyword">VALUES</span><span class="sql"> (значение1, значение2, ... значениеN)</span>
+        </pre>
+      </div>
+
+      <p>
+        После <b>INSERT INTO</b> идет имя таблицы, затем в скобках указываются все столбцы через запятую, в которые надо добавлять данные. И в конце после слова <b>VALUES</b> в скобках перечисляются добавляемые значения.
+      </p>
+      <p>
+        Допустим, у нас в базе данных есть следующая таблица:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    ProductName</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(30) NOT NULL,</span>
+            <span class="line-number">5</span> <span class="sql">    Manufacturer</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">    ProductCount</span><span class="sql-keyword"> INTEGER DEFAULT</span><span class="sql"> 0,</span>
+            <span class="line-number">7</span> <span class="sql">    Price</span><span class="sql-keyword"> NUMERIC</span>
+            <span class="line-number">8</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>Добавим в нее одну строку с помощью команды INSERT:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products</span><span class="sql-keyword"> VALUES</span><span class="sql"> (1, <span style="color: red;">'Galaxy S9'</span>, <span style="color: red;">'Samsung'</span>, 4, 63000)</span>
+        </pre>
+      </div>
+
+      <p>После удачного выполнения в pgAdmin в поле сообщений должно появиться сообщение "INSERT 0 1":</p>
+
+      <img src="assets/images/postgres3.1_1.png" alt="INSERT">
+
+      <p>Стоит учитывать, что значения для столбцов в скобках после ключевого слова VALUES передаются по порядку их объявления. Например, в выражении CREATE TABLE выше можно увидеть, что первым столбцом идет Id, поэтому этому столбцу передаетсячисло 1. Второй столбец называется ProductName, поэтому второе значение - строка "Galaxy S9" будет передано именно этому столбцу и так далее. То есть значения передаются столбцам следующим образом:</p>
+
+      <ul>
+        <li>Id: 1</li>
+        <li>ProductName: 'Galaxy S9'</li>
+        <li>Manufacturer: 'Samsung'</li>
+        <li>ProductCount: 4</li>
+        <li>Price: 63000</li>
+      </ul>
+
+      <p>Также при вводе значений можно указать непосредственные столбцы, в которые будут добавляться значения:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products (ProductName, Price, Manufacturer)</span>
+            <span class="line-number">2</span> <span class="sql-keyword">VALUES</span><span class="sql"> (<span style="color: red;">'iPhone X'</span>, 71000, <span style="color: red;"> 'Apple'</span>);</span>
+        </pre>
+      </div>
+      
+
+      <p>Здесь значение указывается только для трех столбцов. Причем теперь значения передаются в порядке следования столбцов:</p>
+
+      <ul>
+        <li>ProductName: 'iPhone X'</li>
+        <li>Manufacturer: 'Apple'</li>
+        <li>Price: 71000</li>
+      </ul>
+
+      <p>Для столбца Id значение будет генерироваться автоматически базой данных, так как он представляет тип Serial. То есть к значению из последней строки будет добавляться единица.</p>
+
+      <p>Для остальных столбцов будет добавляться значение по умолчанию, если задан атрибут DEFAULT (например, для столбца ProductCount), значение NULL. При этом неуказанные столбцы (за исключением тех, которые имеют тип Serial) должны допускать значение NULL или иметь атрибут DEFAULT.</p>
+
+      <p>Если конкретные столбцы не указываются, как в первом примере, тогда мы должны передать значения для всех столбцов в таблице.</p>
+
+      <p>Также мы можем добавить сразу несколько строк:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products (ProductName, Manufacturer, ProductCount, Price)</span>
+            <span class="line-number">2</span> <span class="sql-keyword">VALUES</span>
+            <span class="line-number">3</span> <span class="sql">(<span style="color: red;">'iPhone 6'</span>, <span style="color: red;"> 'Apple'</span>, 3, 36000),</span>
+            <span class="line-number">4</span> <span class="sql">(<span style="color: red;">'Galaxy S8'</span>, <span style="color: red;"> 'Samsung'</span>, 2, 46000),</span>
+            <span class="line-number">5</span> <span class="sql">(<span style="color: red;">'Galaxy S8 Plus'</span>, <span style="color: red;"> 'Samsung'</span>, 1, 56000),</span>
+        </pre>
+      </div>
+
+      <p>В данном случае в таблицу будут добавлены три строки.</p>
+
+      <h2>Возвращение значений</h2>
+
+      <p>Если мы добавляем значения только для части столбцов, то мы можем не знать, какие значения будут у других столбцов. Например, какое значени получит столбец Id у товара. С помощью оператора <b>RETURNING</b> мы можем получить это значение:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql">(ProductName, Manufacturer, ProductCount, Price)</span>
+            <span class="line-number">3</span> <span class="sql-keyword">VALUES</span><span class="sql">(<span style="color: red;">'Desire 12'</span>, <span style="color: red;"> 'HTC'</span>, 8, 21000) RETURNING id;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.2_1.png" alt="RETURNING">
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter2_6.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter3_2.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

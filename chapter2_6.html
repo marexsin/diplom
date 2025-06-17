@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 2. Определение структуры данных</h3>
+      <ul>
+        <li><a href="chapter2.html"> <b> 1. Создание и удаление базы данных</b></a></li>
+        <li><a href="chapter2_2.html">2. Создание и удаление таблиц</a></li>
+        <li><a href="chapter2_3.html">3. Типы данных в PostgreSQL</a></li>
+        <li><a href="chapter2_4.html">4. Ограничения столбцов и таблиц</a></li>
+        <li><a href="chapter2_5.html">5. Внешние ключи</a></li>
+        <li><a href="chapter2_6.html">6. Изменение таблиц</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Изменение таблиц</h1>
+      <p>
+        Нередко возникает изменить уже имеющуюся таблицу, в частности, добавить или удалить столбцы, изменить тип столбцов и т.д.. То есть потребуется изменить определение таблицы. Для этого применяется выражение ALTER TABLE, которое имеет следующий формальный синтаксис:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> название_таблицы</span>
+            <span class="line-number">2</span> <span class="sql">{</span><span class="sql-keyword"> ADD</span><span class="sql"> название_столбца тип_данных_столбца [ограничения_столбца] |</span>
+            <span class="line-number">3</span> <span class="sql-keyword">  DROP COLUMN</span><span class="sql"> название_столбца |</span>
+            <span class="line-number">4</span> <span class="sql-keyword">  ALTER COLUMN</span><span class="sql"> название_столбца параметры_столбца |</span>
+            <span class="line-number">5</span> <span class="sql-keyword">  ADD</span><span class="sql"> [</span><span class="sql-keyword">    CONSTRAINT</span><span class="sql">] определение_ограничения |</span>
+            <span class="line-number">6</span> <span class="sql-keyword">  DROP</span><span class="sql"> [</span><span class="sql-keyword">    CONSTRAINT</span><span class="sql">] имя_ограничения}</span>
+        </pre>
+      </div>
+
+      <p>Рассмотрим некоторые возможности по изменению таблицы.</p>
+
+      <h2>Добавление нового столбца</h2>
+
+      <p>Добавим в таблицу Customers новый столбец Phone:</p>
+      
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD</span><span class="sql"> Phone</span><span class="sql-keyword"> CHARACTER VARYING</span><span class="sql">(20) NULL;</span>
+        </pre>
+      </div>
+
+      <p>Здесь столбец Phone имеет тип CHARACTER VARYING(20), и для него определен атрибут NULL, то есть столбец допускает отсутствие значения. Но что если нам надо добавить столбец, который не должен принимать значения NULL? Если в таблице есть данные, то следующая команда не будет выполнена:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD</span><span class="sql"> Address</span><span class="sql-keyword"> CHARACTER VARYING</span><span class="sql">(30) NOT NULL;</span>
+        </pre>
+      </div>
+
+      <p>Поэтому в данном случае решение состоит в установке значения по умолчанию через атрибут DEFAULT:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD</span><span class="sql"> Address</span><span class="sql-keyword"> CHARACTER VARYING</span><span class="sql">(30) NOT NULL;</span><span class="sql-keyword"> DEFAULT</span><span class="sql" style="color: #F00;"> 'Неизвестно'</span><span class="sql">;</span>
+        </pre>
+      </div>
+
+      <h2>Удаление столбца</h2>
+
+      <p>Удалим столбец Address из таблицы Customers:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">DROP COLUMN</span><span class="sql"> Address;</span>
+        </pre>
+      </div>
+
+      <h2>Изменение типа столбца</h2>
+
+      <p>Для изменения типа применяется ключевое слово TYPE. Изменим в таблице Customers тип данных у столбца FirstName на VARCHAR(50) (он же VARYING CHARACTER(50)):</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">DROP COLUMN</span><span class="sql"> FirstName TYPE</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(50);</span>
+        </pre>
+      </div>
+
+      <h2>Изменение ограничений столбца</h2>
+
+      <p>Для добавления ограничения применяется оператор <b>SET</b>, после которого указывается ограничение. Например, установим для столбца FirstName ограничение NOT NULL:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ALTER COLUMN</span><span class="sql"> FirstName</span>
+            <span class="line-number">3</span> <span class="sql-keyword">SET</span><span class="sql"> NOT NULL;</span>
+        </pre>
+      </div>
+
+      <p>Для удаления ограничения применяется оператор <b>DROP</b>, после которого указывается ограничение. Например, удалим выше установленное ограничение:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ALTER COLUMN</span><span class="sql"> FirstName</span>
+            <span class="line-number">3</span> <span class="sql-keyword">DROP</span><span class="sql"> NOT NULL;</span>
+        </pre>
+      </div>
+
+      <h2>Изменение ограничений таблицы</h2>
+
+      <p>Добавление ограничения CHECK:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD CHECK</span><span class="sql"> (Age > 0);</span>
+        </pre>
+      </div>
+
+      <p>
+        Добавление первичного ключа PRIMARY KEY:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD PRIMARY KEY</span><span class="sql"> (Id);</span>
+        </pre>
+      </div>
+
+      <p>В данном случае предполагается, что в таблице уже есть столбец Id, который не имеет ограничения PRIMARY KEY. А с помощью вышеуказанного скрипта устанавливается ограничение PRIMARY KEY.</p>
+
+      <p>Добавление ограничение UNIQUE - определим для столбца Email уникальные значения:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD UNIQUE</span><span class="sql"> (Email);</span>
+        </pre>
+      </div>
+
+      <p>
+        При добавлении ограничения каждому из них дается определенное имя. Например, выше добавленное ограничение для CHECK будет называться <i>customers_age_check</i>. Имена ограничений можно посмотреть в таблице через pgAdmin.
+      </p>
+
+      <p>Также мы можем явным образом назначить ограничению при добавлении имя с помощью оператора <b>CONSTRAINT</b>.</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">ADD CONSTRAINT</span><span class="sql"> phone_unique</span><span class="sql-keyword"> UNIQUE</span><span class="sql"> (Phone);</span>
+        </pre>
+      </div>
+
+      <p>В данном случае ограничение будет называться "phone_unique".</p>
+
+      <p>Чтобы удалить ограничение, надо знать его имя, которое указывается после выражения DROP CONSTRAINT. Например, удалим выше добавленное ограничение:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql-keyword">DROP CONSTRAINT</span><span class="sql"> phone_unique;</span>
+        </pre>
+      </div>
+
+      <h2>Переименование столбца и таблицы</h2>
+
+      <p>Переименуем столбец Address в City:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql">RENAME</span><span class="sql-keyword"> COLUMN</span><span class="sql"> Address</span><span class="sql-keyword"> TO</span><span class="sql"> City;</span>
+        </pre>
+      </div>
+
+      <p>Переименуем таблицу Customers в Users:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">ALTER TABLE</span><span class="sql"> Customers</span>
+            <span class="line-number">2</span> <span class="sql">RENAME</span><span class="sql-keyword"> TO</span><span class="sql"> Users;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="button">
+    <button class="test" onclick="location.href='test2.html'">ПРОЙТИ ТЕСТ</button>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter2_5.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter3.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

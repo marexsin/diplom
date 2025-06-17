@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 4. Запросы</h3>
+      <ul>
+        <li><a href="chapter4.html"> <b> 1. DISTINCT. Выборка уникальных значений</b></a></li>
+        <li><a href="chapter4_2.html">2. ORDER BY. Сортировка</a></li>
+        <li><a href="chapter4_3.html">3. Получение диапазона строк. LIMIT и OFFSET</a></li>
+        <li><a href="chapter4_4.html">4. Операторы фильтрации</a></li>
+        <li><a href="chapter4_5.html">5. Агрегатные функции</a></li>
+        <li><a href="chapter4_6.html">6. Группировка</a></li>
+        <li><a href="chapter4_7.html">7. Подзапросы</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Запросы</h1>
+      <h2><a href="#">DISTINCT. Выборка уникальных значений</a></h2>
+      <p>
+        Оператор <b>DISTINCT</b> позволяет выбрать уникальные данные по определенным столбцам.
+      </p>
+      <p>
+        Например, в таблице товаров разные товары могут иметь одних и тех же производителей. Например, у нас следующая таблица:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    ProductName</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(30) NOT NULL,</span>
+            <span class="line-number">5</span> <span class="sql">    Manufacturer</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">    ProductCount</span><span class="sql-keyword"> INTEGER DEFAULT</span><span class="sql"> 0,</span>
+            <span class="line-number">7</span> <span class="sql">    Price</span><span class="sql-keyword"> NUMERIC</span>
+            <span class="line-number">8</span> <span class="sql">);</span>
+            <span class="line-number">9</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products  (ProductName, Manufacturer, ProductCount, Price)</span>
+            <span class="line-number">10</span> <span class="sql-keyword">VALUES</span>
+            <span class="line-number">11</span> <span class="sql">(<span style="color: red;">'iPhone X'</span>, <span style="color: red;">'Apple'</span>, 2, 71000),</span>
+            <span class="line-number">12</span> <span class="sql">(<span style="color: red;">'iPhone 8'</span>, <span style="color: red;">'Apple'</span>, 3, 56000),</span>
+            <span class="line-number">13</span> <span class="sql">(<span style="color: red;">'Galaxy S9'</span>, <span style="color: red;">'Samsung'</span>, 6, 56000),</span>
+            <span class="line-number">14</span> <span class="sql">(<span style="color: red;">'Galaxy S8 Plus'</span>, <span style="color: red;">'Samsung'</span>, 2, 46000),</span>
+            <span class="line-number">15</span> <span class="sql">(<span style="color: red;">'Desire 12'</span>, <span style="color: red;">'HTC'</span>, 3, 26000),</span>
+        </pre>
+      </div>
+
+      <p>
+        Выберем всех производителей:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT DISTINCT</span><span class="sql"> Manufacturer</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.1_1.png" alt="Производители">
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter3_5.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter4_2.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

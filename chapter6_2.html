@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 6. Соединение таблиц</h3>
+      <ul>
+        <li><a href="chapter6.html"> <b> 1. Неявное соединение таблиц</b></a></li>
+        <li><a href="chapter6_2.html">2. INNER JOIN</a></li>
+        <li><a href="chapter6_3.html">3. OUTER JOIN и CROSS JOIN</a></li>
+        <li><a href="chapter6_4.html">4. Группировка в соединениях</a></li>
+        <li><a href="chapter6_5.html">5. Объединение множеств. UNION</a></li>
+        <li><a href="chapter6_6.html">6. Разность множеств. EXCEPT</a></li>
+        <li><a href="chapter6_7.html">7. Пересечение множеств. INTERSECT</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>INNER JOIN</h2>
+      <p>
+        Еще одним способом соединения таблиц является использование оператора <b>JOIN</b> или <b>INNER JOIN</b>. Он представляет так называемое внутренее соединение. Его формальный синтаксис:
+      </p>
+
+
+      <p>
+        После оператора <b>JOIN</b> идет название второй таблицы, данные которой надо добавить в выборку. Перед JOIN можно указывать необязательный оператор <b>INNER</b>. Его наличие или отсутствие ни на что не влияет. Далее после ключевого слова <b>ON</b> указывается условие соединения. Это условие устанавливает, как две таблицы будут сравниваться. Как правило, для соединения применяется первичный ключ главной таблицы и внешний ключ зависимой таблицы.
+      </p>
+
+      <p>
+        Возьмем таблицы с данными из прошлой темы:
+      </p>
+
+
+
+      <p>Используя JOIN, выберем все заказы и добавим к ним информацию о товарах:</p>
+
+
+
+      <p>Поскольку таблицы могут содержать столбцы с одинаковыми названиями, то при указании столбцов для выборки указывается их полное имя вместе с именем таблицы, например, "Orders.ProductCount".</p>
+
+      <img src="assets/images/postgres6.1_2.png" alt="Orders.ProductCount">
+
+      <p>С помощью псевдонимов, определяемых через оператор AS, можно сократить код:</p>
+
+
+      <p>Подобным образом мы можем присоединять и другие таблицы. Например, добавим к заказу информацию о покупателе из таблицы Customers:</p>
+
+
+
+      <img src="assets/images/postgres6.2_2.png" alt="Информация о покупателе">
+
+      <p>Благодаря соединению таблиц мы можем использовать их столбцы для фильтрации выборки или ее сортировки:</p>
+
+
+
+      <p>Условия после ключевого слова ON могут быть более сложными по составу. Например, выбирем все заказы на товары, производителем которых является Apple.</p>
+
+       
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter6.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter6_3.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 6. Соединение таблиц</h3>
+      <ul>
+        <li><a href="chapter6.html"> <b> 1. Неявное соединение таблиц</b></a></li>
+        <li><a href="chapter6_2.html">2. INNER JOIN</a></li>
+        <li><a href="chapter6_3.html">3. OUTER JOIN и CROSS JOIN</a></li>
+        <li><a href="chapter6_4.html">4. Группировка в соединениях</a></li>
+        <li><a href="chapter6_5.html">5. Объединение множеств. UNION</a></li>
+        <li><a href="chapter6_6.html">6. Разность множеств. EXCEPT</a></li>
+        <li><a href="chapter6_7.html">7. Пересечение множеств. INTERSECT</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Разность множеств. EXCEPT</h2>
+      <p>
+        Оператор <b>EXCEPT</b> в PostgreSQL позволяет найти разность двух выборок, то есть те строки которые есть в первой выборке, но которых нет во второй. Для его использования применяется следующий формальный синтаксис:
+      </p>
+
+      <p>
+        Для примера возьмем таблицы из прошлой темы:
+      </p>
+
+      <p>
+        Таблица Employees содержит данные обо всех сотрудниках банка, а таблица Customers - обо всех клиентах. Но сотрудники банка могут также быть его клиентами. И допустим, нам надо найти всех клиентов банка, которые не являются его сотрудниками:
+      </p>
+
+
+      <img src="assets/images/postgres6.1_6.png" alt="Employees">
+
+      <p>Подобным образом можно получить всех сотрудников банка, которые не являются его клиентами:</p>
+
+    
+
+      <img src="assets/images/postgres6.2_6.png" alt="Все сотрудники банка, которые не являются его клиентами">
+       
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter6_5.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter6_7.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

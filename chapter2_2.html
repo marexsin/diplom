@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 2. Определение структуры данных</h3>
+      <ul>
+        <li><a href="chapter2.html"> <b> 1. Создание и удаление базы данных</b></a></li>
+        <li><a href="chapter2_2.html">2. Создание и удаление таблиц</a></li>
+        <li><a href="chapter2_3.html">3. Типы данных в PostgreSQL</a></li>
+        <li><a href="chapter2_4.html">4. Ограничения столбцов и таблиц</a></li>
+        <li><a href="chapter2_5.html">5. Внешние ключи</a></li>
+        <li><a href="chapter2_6.html">6. Изменение таблиц</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Создание и удаление таблиц</h1>
+      <p>
+        Для создания таблиц применяется команда CREATE TABLE, после которой указывается название таблицы. Также с этой командой можно использовать ряд операторов, которые определяют столбцы таблицы и их атрибуты. Общий синтаксис создания таблицы выглядит следующим образом:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span> <span class="sql">название_таблицы</span>
+            <span class="line-number">2</span> <span class="sql">(название_столбца1 тип_данных атрибуты_столбца1,</span>
+            <span class="line-number">3</span> <span class="sql"> название_столбца2 тип_данных атрибуты_столбца2,</span>
+            <span class="line-number">4</span> <span class="sql"> ................................................</span>
+            <span class="line-number">5</span> <span class="sql"> название_столбцаN тип_данных атрибуты_столбцаN,</span>
+            <span class="line-number">6</span> <span class="sql"> атрибуты_таблицы</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>
+        После названия таблицы в скобках перечисляется спецификация для всех столбцов. Причем для каждого столбца надо указывается название и тип данных, который он будет представлять. Тип данных определяет, какие данные (числа, строки и т.д.) может содержать столбец.
+      </p>
+      <p>
+        Например, создадим таблицу в базе данных через pgAdmin. Для этого вначале выберем в pgAdmin целевую базу данных, нажмем на нее правой кнопкой мыши и в контекстном меню выберем пункт Query Tool...:
+      </p>
+
+      <img src="assets/images/postgres2.1_2.png" alt="Инструкция по установке PostgreSQL" class="screenshot" />
+
+      <p>После этого откроется поле для ввода кода на SQL. Причем таблица будет создаваться именно для той базы данных, для которой мы откровыем это поле для ввода SQL.</p>
+
+      <p>Далее в открывшееся в центральной части программы поле введем следующий набор выражений:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span> <span class="sql">customers</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    FirstName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">5</span> <span class="sql">    LastName</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">6</span> <span class="sql">    Email</span><span class="sql-keyword">CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">7</span> <span class="sql">    Age</span><span class="sql-keyword">INTEGER</span>
+            <span class="line-number">7</span> <span class="sql">);</span>
+        </pre>
+      </div>
+
+      <p>В данном случае в таблице Customers определяются пять столбцов: Id, FirstName, LastName, Age, Email. Первый столбец - Id представляет идентификатор клиента, он служит первичным ключом и поэтому имеет тип SERIAL. Фактически данный столбец будет хранить числовое значение 1, 2, 3 и т.д., которое для каждой новой строки будет автоматически увеличиваться на единицу.</p>
+
+      <p>Следующие три столбца представляют имя, фамилию клиента и его электронный адрес и имеют тип CHARACTER VARYING(30), то есть представляют строку длиной не более 30 символов.</p>
+
+      <p>Последний столбец - Age представляет возраст пользователя и имеет тип INTEGER, то есть хранит числа.</p>
+
+      <img src="assets/images/postgres2.2_2.png" alt="Установка EDB PostgreSQL" class="screenshot" />
+
+      <p>И после выполнения этой команды в выбранную базу данных будет добавлена таблица customers.</p>
+
+      <h3>Удаление таблиц</h3>
+
+      <p>Для удаления таблиц используется команда DROP TABLE, которая имеет следующий синтаксис:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DROP TABLE</span> <span class="sql">table1 [, table2, ...];</span>
+        </pre>
+      </div>
+
+      <p>Например, удаление таблицы customers:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DROP TABLE</span> <span class="sql">customers;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter2.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter2_3.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 3. Операции с данными</h3>
+      <ul>
+        <li><a href="chapter3.html"> <b> 1. Добавление данных. Команда Insert</b></a></li>
+        <li><a href="chapter3_2.html">2. Получение данных. Команда Select</a></li>
+        <li><a href="chapter3_3.html">3. Фильтрация. WHERE</a></li>
+        <li><a href="chapter3_4.html">4. Обновление данных. Команда UPDATE</a></li>
+        <li><a href="chapter3_5.html">5. Удаление данных. Команда DELETE</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Удаление данных. Команда DELETE</h2>
+      <p>
+        Для удаления данных в PostgreSQL применяется команда <b>DELETE</b>. Она имеет следующий синтаксис:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DELETE FROM</span><span class="sql"> имя_таблицы</span>
+            <span class="line-number">2</span> <span class="sql">[</span><span class="sql-keyword">WHERE</span><span class="sql"> условие_удаления]</span>
+        </pre>
+      </div>
+
+      <p>
+        Например, удалим строки, у которых производитель - Apple:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DELETE FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer=<span style="color: red;">'Apple'</span>;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.1_5.png" alt="Удаление строк">
+
+      <p>Или удалим все товары, производителем которых является HTC и которые имеют цену меньше 35000:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DELETE FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer=<span style="color: red;">'HTC'</span> AND Price < 15000;</span>
+        </pre>
+      </div>
+
+      <p>
+        Если необходимо вовсе удалить все строки вне зависимости от условия, то условие можно не указывать:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">DELETE FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="button">
+    <button class="test" onclick="location.href='test3.html'">ПРОЙТИ ТЕСТ</button>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter3_4.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter4.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

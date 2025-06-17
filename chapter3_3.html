@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 3. Операции с данными</h3>
+      <ul>
+        <li><a href="chapter3.html"> <b> 1. Добавление данных. Команда Insert</b></a></li>
+        <li><a href="chapter3_2.html">2. Получение данных. Команда Select</a></li>
+        <li><a href="chapter3_3.html">3. Фильтрация. WHERE</a></li>
+        <li><a href="chapter3_4.html">4. Обновление данных. Команда UPDATE</a></li>
+        <li><a href="chapter3_5.html">5. Удаление данных. Команда DELETE</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Фильтрация. WHERE</h2>
+      <p>
+        Для фильтрации данных применяется оператор WHERE, после которого указывается условие, на основании которого производится фильтрация:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">WHERE</span><span class="sql"> условие</span>
+        </pre>
+      </div>
+
+      <p>
+        Если условие истинно, то строка попадает в результирующую выборку. В качестве можно использовать операции сравнения. Эти операции сравнивают два выражения. В PostgreSQL можно применять следующие операции сравнения:
+      </p>
+
+      <ul>
+        <li><b>=</b>: сравнение на равенство</li>
+        <li><b><></b>: сравнение на неравенство</li>
+        <li><b>!=</b>: сравнение на неравенство</li>
+        <li><b><</b>: меньше чем</li>
+        <li><b>></b>: больше чем</li>
+        <li><b><=</b>: меньше чем или равно</li>
+        <li><b>>=</b>: больше чем или равно</li>
+      </ul>
+
+      <p>Например, найдем всех товары, производителем которых является компания Apple:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql">  Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Apple'</span>;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.1_3.png" alt="Apple">
+
+      <p>
+        Стоит отметить, что в данном случае большое значение имеет регистр символов, к примеру, строка "Apple" не эквивалентна строке "APPLE" или "apple".
+      </p>
+
+      <p>Другой пример - найдем все товары, у которых цена меньше 29000:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql">  Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Price < 39000;</span>
+        </pre>
+      </div>
+
+      <p>В качестве условия могут использоваться и более сложные выражения. Например, найдем все товары, у которых совокупная стоимость больше 90 000:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql">  Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Price * ProductCount > 90000;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.2_3.png" alt="90 000">
+
+      <h3>Логические операторы</h3>
+
+      <p>Чтобы объединить нескольких условий в одно, в PostgreSQL можно использовать логические операторы:</p>
+
+      <ul>
+        <li>
+            <b>AND</b>: операция логического И. Она объединяет два выражения:
+
+            <div class="code-block">
+                <pre>
+                    <span class="line-number">1</span> <span class="sql">выражение1 AND выражение2</span>
+                </pre>
+            </div>
+
+            <p>Только если оба этих выражения одновременно истинны, то и общее условие оператора AND также будет истинно. То есть если и первое условие истинно, и второе.</p>
+        </li>
+
+        <li>
+            <b>OR</b>: операция логического ИЛИ. Она также объединяет два выражения:
+
+            <div class="code-block">
+                <pre>
+                    <span class="line-number">1</span> <span class="sql">выражение1 OR выражение2</span>
+                </pre>
+            </div>
+
+            <p>Если хотя бы одно из этих выражений истинно, то общее условие оператора OR также будет истинно. То есть если или первое условие истинно, или второе.</p>
+        </li>
+
+        <li>
+            <b>NOT</b>: операция логического отрицания. Если выражение в этой операции ложно, то общее условие истинно.
+            
+            <div class="code-block">
+                <pre>
+                    <span class="line-number">1</span> <span class="sql">NOT выражение</span>
+                </pre>
+            </div>
+
+        </li>
+      </ul>
+
+      <p>Например, выберем все товары, у которых производитель Samsung и одновременно цена больше 50000:</p>
+
+    <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung'</span> AND Price > 50000;</span>
+        </pre>
+    </div>
+
+      <img src="assets/images/postgres3.3_3.png" alt="50000">
+
+      <p>Теперь изменим оператор на OR. То есть выберем все товары, у которых либо производитель Samsung, либо цена больше 50000:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung'</span> OR Price > 50000;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.4_3.png" alt="OR">
+
+      <p>Применение оператора NOT - выберем все товары, у которых производитель не Samsung:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> NOT Manufacturer = <span style="color: red;">'Samsung'</span></span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.5_3.png" alt="NOT">
+
+      <p>Но в большинстве случае вполне можно обойтись без оператора NOT. Так, в предыдущий пример мы можем переписать следующим образом:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer <> <span style="color: red;">'Samsung'</span></span>
+        </pre>
+      </div>
+
+      <p>Также в одной команде SELECT можно использовать сразу несколько операторов:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung'</span> OR Price > 30000 AND ProductCount > 2;</span>
+        </pre>
+      </div>
+
+      <p>Так как оператор AND имеет более высокий приоритет, то сначала будет выполняться подвыражение Price > 30000 AND ProductCount > 2, и только потом оператор OR. То есть здесь выбираются товары, которыех на складе больше 2 и у которых одновременно цена больше 30000, либо те товары, производителем которых является Samsung.</p>
+
+      <p>С помощью скобок мы также можем переопределить порядок операций:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> (Manufacturer = <span style="color: red;">'Samsung'</span> OR Price > 30000) AND ProductCount > 2;</span>
+        </pre>
+      </div>
+
+      <h3>IS NULL</h3>
+
+      <p>Ряд столбцов может допускать значение NULL. Это значение не эквивалентно пустой строке ''. NULL представляет полное отсутствие какого-либо значения. И для проверки на наличие подобного значения применяется оператор <b>IS NULL</b>.</p>
+
+      <p>Например, выберем все товары, у которых не установлено поле ProductCount:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> ProductCount</span><span class="sql-keyword"> IS</span><span class="sql"> NULL;</span>
+        </pre>
+      </div>
+
+      <p>Если, наоборот, необходимо получить строки, у которых поле ProductCount не равно NULL, то можно использовать оператор NOT:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> ProductCount</span><span class="sql-keyword"> IS</span><span class="sql"> NOT NULL;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter3_2.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter3_4.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

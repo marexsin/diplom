@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+    <img src="assets/images/sql.png" alt="PostgreSQL Logo" class="logo">
+    <a href="#" class="home-link">Вернуться на главную страницу</a>
+  </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 3. Операции с данными</h3>
+      <ul>
+        <li><a href="chapter3.html"> <b> 1. Добавление данных. Команда Insert</b></a></li>
+        <li><a href="chapter3_2.html">2. Получение данных. Команда Select</a></li>
+        <li><a href="chapter3_3.html">3. Фильтрация. WHERE</a></li>
+        <li><a href="chapter3_4.html">4. Обновление данных. Команда UPDATE</a></li>
+        <li><a href="chapter3_5.html">5. Удаление данных. Команда DELETE</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Обновление данных. Команда UPDATE</h2>
+      <p>
+        Для обновления данных в базе данных PostgreSQL применяется команда <b>UPDATE</b>. Она имеет следующий общий формальный синтаксис:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">UPDATE</span><span class="sql"> имя_таблицы</span>
+            <span class="line-number">2</span> <span class="sql-keyword">SET</span><span class="sql"> столбец1 = значение1, столбец2 = значение2, ... столбецN = значениеN</span>
+            <span class="line-number">3</span> <span class="sql">[</span><span class="sql-keyword">WHERE</span><span class="sql"> условие_обновления]</span>
+        </pre>
+      </div>
+
+      <p>
+        Например, увеличим у всех товаров цену на 3000:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">UPDATE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">SET</span><span class="sql"> Price = Price + 3000;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.1_4.png" alt="3000">
+
+      <p>В данном случае обновление касается всех строк. С помощью выражения <b>WHERE</b> можно с помощью условию конкретизировать обновляемые строки - если строка соответствует условию, то она будет обновляться. Например, изменим название производителя с "Samsung" на "Samsung Inc.":</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">UPDATE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">SET</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung Inc.'</span></span>
+            <span class="line-number">3</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung'</span>;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres3.2_4.png" alt="Samsung Inc">
+
+      <p>
+        Также можно обновлять сразу несколько столбцов:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">UPDATE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">SET</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung'</span>,</span>
+            <span class="line-number">3</span> <span class="sql">    ProductCount = ProductCount + 3</span>
+            <span class="line-number">4</span> <span class="sql-keyword">WHERE</span><span class="sql"> Manufacturer = <span style="color: red;">'Samsung Inc.'</span>;</span>
+        </pre>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter3_3.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter3_5.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

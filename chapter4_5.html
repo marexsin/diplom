@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 4. Запросы</h3>
+      <ul>
+        <li><a href="chapter4.html"> <b> 1. DISTINCT. Выборка уникальных значений</b></a></li>
+        <li><a href="chapter4_2.html">2. ORDER BY. Сортировка</a></li>
+        <li><a href="chapter4_3.html">3. Получение диапазона строк. LIMIT и OFFSET</a></li>
+        <li><a href="chapter4_4.html">4. Операторы фильтрации</a></li>
+        <li><a href="chapter4_4.html">5. Агрегатные функции</a></li>
+        <li><a href="chapter4_4.html">6. Группировка</a></li>
+        <li><a href="chapter4_4.html">7. Подзапросы</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Агрегатные функции</h2>
+
+      <p>
+        Агрегатные функции вычисляют одно значение над некоторым набором строк. В PostgreSQL имеются следующие агрегатные функции:
+      </p>
+
+      <ul>
+        <li><b>AVG</b>: находит среднее значение. Входной параметр должен представлять один из следующих типов: <i>smallint, int, bigint, real, double precision, numeric, interval</i>. Для целочисленнных параметров результатом будет значение типа <i>numeric</i>, для параметров, которые представляют число с плавающей точкой, - значение типа <i>double precision</i>.</li>
+
+        <li><b>BIT_AND</b>: выполняет операцию побитового умножения (операции логического И) для чисел следующих типов: <i>smallint, int, bigint, bit</i>. Если параметр содержит значение NULL, то возвращается NULL.</li>
+
+        <li><b>BIT_OR</b>: выполняет операцию побитового сложения (операции логического ИЛИ) для чисел следующих типов: <i>smallint, int, bigint, bit</i>. Если параметр содержит значение NULL, то возвращается NULL.</li>
+
+        <li><b>BOOL_AND</b>: выполняет операцию логического умножения для значений типа <i>bool</i>. Если входные все значения равны true, то возвращается true, иначе возвращается false.</li>
+
+        <li><b>COUNT(*)</b>: находит количество строк в запросе</li>
+
+        <li><b>COUNT(expression)</b>: находит количество строк в запросе, для которых expression не содержит значение NULL.</li>
+
+        <li><b>SUM</b>: находит сумму значений</li>
+
+        <li><b>MIN</b>: находит наименьшее значение</li>
+
+        <li><b>MAX</b>: находит наибольшее значение</li>
+
+        <li><b>STRING_AGG(expression, delimiter)</b>: соединяет с помощью delimiter все текстовые значения из expression в одну строку.</li>
+      </ul>
+
+      <p>В качестве параметра все агрегатные функции принимают выражение, которое представляет критерий для определения значений. Зачастую, в качестве выражения выступает название столбца, над значениями которого надо проводить вычисления.</p>
+
+      <p>Если в наборе нет строк, то все агрегатные функции за исключением COUNT(*) возвращают значение NULL.</p>
+
+      <h3>Avg</h3>
+
+      <p>Функция <b>Avg</b> возвращает среднее значение на диапазоне значений столбца таблицы.</p>
+
+      <p>Пусть в базе данных у нас есть таблица товаров Products, которая описывается следующими выражениями:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">    Id SERIAL</span><span class="sql-keyword"> PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql">    ProductName</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(30) NOT NULL,</span>
+            <span class="line-number">5</span> <span class="sql">    Company</span><span class="sql-keyword"> VARCHAR</span><span class="sql">(20) NOT NULL,</span>
+            <span class="line-number">6</span> <span class="sql">    ProductCount</span><span class="sql-keyword"> INT DEFAULT</span><span class="sql"> 0,</span>
+            <span class="line-number">7</span> <span class="sql">    Price</span><span class="sql-keyword"> NUMERIC</span><span class="sql"> NOT NULL,</span>
+            <span class="line-number">8</span> <span class="sql">    IsDiscounted BOOL</span>
+            <span class="line-number">9</span> <span class="sql">);</span>
+            <span class="line-number">10</span> <span class="sql"></span>
+            <span class="line-number">11</span> <span class="sql-keyword">INSERT INTO</span><span class="sql"> Products (ProductName, Company, ProductCount, Price, IsDiscounted) </span>
+            <span class="line-number">12</span> <span class="sql-keyword">VALUES</span>
+            <span class="line-number">13</span> <span class="sql">(<span style="color: red;">'iPhone X'</span>, <span style="color: red;">'Apple'</span>, 3, 76000, <span style="color: blue;">false</span>),</span>
+            <span class="line-number">14</span> <span class="sql">(<span style="color: red;">'iPhone 8'</span>, <span style="color: red;">'Apple'</span>, 2, 71000, <span style="color: blue;">true</span>),</span>
+            <span class="line-number">15</span> <span class="sql">(<span style="color: red;">'iPhone 7'</span>, <span style="color: red;">'Apple'</span>, 5, 42000, <span style="color: blue;">true</span>),</span>
+            <span class="line-number">16</span> <span class="sql">(<span style="color: red;">'Galaxy S9'</span>, <span style="color: red;">'Samsung'</span>, 2, 46000, <span style="color: blue;">false</span>),</span>
+            <span class="line-number">17</span> <span class="sql">(<span style="color: red;">'Galaxy S8 Plus'</span>, <span style="color: red;">'Samsung'</span>, 1, 56000, <span style="color: blue;">true</span>),</span>
+            <span class="line-number">18</span> <span class="sql">(<span style="color: red;">'Desire 12'</span>, <span style="color: red;">'HTC'</span>, 5, 28000, <span style="color: blue;">true</span>),</span>
+            <span class="line-number">19</span> <span class="sql">(<span style="color: red;">'Nokia 9'</span>, <span style="color: red;">'HMD Global'</span>, 6, 38000, <span style="color: blue;">true</span>);</span>
+        </pre>
+      </div>
+
+      <p>Найдем среднюю цену товаров из базы данных:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> <span style="color: red;">AVG</span>(Price)</span><span class="sql-keyword"> AS</span><span class="sql">  Average_Price</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <p>Для поиска среднего значения в качестве выражения в функцию передается столбец Price. Для получаемого значения устанавливается псевдоним Average_Price, хотя можно его и не устанавливать.</p>
+
+      <img src="assets/images/postgres4.1_5.png" alt="Average_Price">
+
+      <p>
+        Также мы можем применить фильтрацию. Например, найти среднюю цену для товаров какого-то определенного производителя:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;">AVG</span><span class="sql">(Price)</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span> <span class="sql"> Company=<span style="color: red;">'Apple'</span>;</span>
+        </pre>
+      </div>
+
+      <p>И, кроме того, мы можем находить среднее значение для более сложных выражений. Например, найдем среднюю сумму всех товаров, учитывая их количество:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;">AVG</span><span class="sql">(Price * ProductCount)</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+        </pre>
+      </div>
+
+      <h3>Count</h3>
+
+      <p>
+        Функция <b>Count</b> вычисляет количество строк в выборке. Есть две формы этой функции. Первая форма COUNT(*) подсчитывает число строк в выборке: 
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;"> COUNT</span><span class="sql">(*)</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.2_5.png" alt="Count">
+
+      <p>Вторая форма функции вычисляет количество строк по определенному столбцу, при этом строки со значениями NULL игнорируются:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;"> COUNT</span><span class="sql">(<span class="sql-keyword">Company</span>)</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+        </pre>
+      </div>
+
+      <p>Оператор <b>DISTINCT</b> указывает, что надо взять именно уникальные значения из столбца Company.</p>
+
+      <h3>Min и Max</h3>
+
+      <p>Функции <b>Min</b> и <b>Max</b> возвращают соответственно минимальное и максимальное значение по столбцу. Например, найдем минимальную цену среди товаров:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT MIN</span> <span class="sql">(Price)<span class="sql-keyword"> FROM</span></span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <p>Поиск максимальной цены:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT MAX</span> <span class="sql">(Price)<span class="sql-keyword"> FROM</span></span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <p>Данные функции также игнорируют значения NULL и не учитывают их при подсчете.</p>
+
+      <h3>Sum</h3>
+
+      <p>Функция <b>Sum</b> вычисляет сумму значений столбца. Например, подсчитаем общее количество товаров:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;"> SUM</span> <span class="sql">(ProductCount)</span><span class="sql-keyword"> FROM</span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <p>Также вместо имени столбца может передаваться вычисляемое выражение. Например, найдем общую стоимость всех имеющихся товаров:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span style="color: red;"> SUM</span> <span class="sql">(ProductCount * Price)</span><span class="sql-keyword"> FROM</span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <h3>BOOL_AND и BOOL_OR</h3>
+
+      <p>Допустим, нам надо узнать, есть ли в таблице товары, которые подлежать скидке, то есть у которых IsDiscounted = true. В этом случае можно выполнить функцию BOOL_OR, которая возвращает true, если хотя бы одно значение в наборе равно true:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span class="sql"> BOOL_OR(IsDiscounted)</span><span class="sql-keyword"> FROM</span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <p>Если нам надо узнать, все ли товары подлежат скидке, то можно применить функцию BOOL_AND, которая возвращает true, если все значения в наборе равны true:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span class="sql"> BOOL_AND(IsDiscounted)</span><span class="sql-keyword"> FROM</span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <h3>STRING_AGG</h3>
+
+      <p>Функция <b>STRING_AGG()</b> объединяет набор строковых значений или значений bytea. Например, выберем названия всех товаров:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span class="sql"> STRING_AGG(ProductName, ', ')</span><span class="sql-keyword"> FROM</span><span class="sql">  Products;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.3_5.png" alt="STRING_AGG()">
+
+      <p>Или выберем всех производителей:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span class="sql"> STRING_AGG(</span><span class="sql-keyword">DISTINCT</span><span class="sql"> Company, ', ')</span><span class="sql-keyword"> FROM</span><span class="sql"> Products;</span>
+            <span class="line-number">2</span> <span class="sql"></span>
+            <span class="line-number">3</span> <span class="sql" style="color: green;">-- результат операции</span>
+            <span class="line-number">4</span> <span class="sql" style="color: green;">-- Apple, HMD Global, HTC, Samsung </span>
+        </pre>
+      </div>
+
+      <p>Чтобы выбрать уникальных производителей, здесь также применяется оператор DISTINCT, иначе у нас бы повторялись значения.</p>
+
+      <h3>Комбинирование функций</h3>
+
+      <p>Объединим применение нескольких функций:</p>
+
+      <img src="assets/images/postgres4.4_5.png" alt="DISTINCT">
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter4_4.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter4_6.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

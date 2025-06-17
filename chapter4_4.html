@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 4. Запросы</h3>
+      <ul>
+        <li><a href="chapter4.html"> <b> 1. DISTINCT. Выборка уникальных значений</b></a></li>
+        <li><a href="chapter4_2.html">2. ORDER BY. Сортировка</a></li>
+        <li><a href="chapter4_3.html">3. Получение диапазона строк. LIMIT и OFFSET</a></li>
+        <li><a href="chapter4_4.html">4. Операторы фильтрации</a></li>
+        <li><a href="chapter4_4.html">5. Агрегатные функции</a></li>
+        <li><a href="chapter4_4.html">6. Группировка</a></li>
+        <li><a href="chapter4_4.html">7. Подзапросы</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h2>Операторы фильтрации</h2>
+      <br>
+      <h3>Оператор IN</h3>
+
+      <p>
+        Оператор <b>IN</b> позволяет определить набор значений, которые должны иметь столбцы:
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">WHERE</span><span class="sql">  выражение [NOT] IN (выражение)</span>
+        </pre>
+      </div>
+
+      <p>
+        Выражение в скобках после IN определяет набор значений. Этот набор может вычисляться динамически на основании, например, еще одного запроса, либо это могут быть константные значения.
+      </p>
+
+      <p>Например, выберем товары, у которых производитель либо Samsung, либо Xiaomi, либо Huawei:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql">  Manufacturer IN (<span style="color: red;">'Samsung'</span>, <span style="color: red;">'HTC'</span>, <span style="color: red;">'Huawei'</span>);</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.1_4.png" alt="либо Samsung, либо Xiaomi, либо Huawei">
+
+      <p>
+        В качестве алтернативы можно было бы проверить все эти значения через оператор OR: 
+      </p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql">  Manufacturer = <span style="color: red;">'Samsung'</span> OR Manufacturer = <span style="color: red;">'HTC'</span>,  OR Manufacturer = <span style="color: red;">'Huawei'</span>;</span>
+        </pre>
+      </div>
+
+      <p>Однако использование оператора IN гораздо удобнее, особенно если подобных значений очень много.</p>
+
+      <p>С помощью оператора NOT можно найти все строки, которые, наоборот, не соответствуют набору значений:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql">  Manufacturer NOT IN (<span style="color: red;">'Samsung'</span>, <span style="color: red;">'HTC'</span>, <span style="color: red;">'Huawei'</span>);</span>
+        </pre>
+      </div>
+
+      <h3>Оператор BETWEEN</h3>
+
+      <p>Оператор <b>BETWEEN</b> определяет диапазон значений с помощью начального и конечного значения, которому должно соответствовать выражение:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">WHERE</span><span class="sql"> выражение [NOT] BETWEEN начальное_значение AND конечное_значение</span>
+        </pre>
+      </div>
+
+      <p>Например, получим все товары, у которых цена от 20 000 до 50 000 (начальное и конечное значения также включаются в диапазон):</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Price BETWEEN 20000 AND 50000;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.2_4.png" alt="Товары">
+
+      <p>Если надо, наоборот, выбрать те строки, которые не попадают в данный диапазон, то применяется оператор NOT:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Price NOT BETWEEN 20000 AND 50000;</span>
+        </pre>
+      </div>
+
+      <p>Также можно использовать более сложные выражения. Например, получим товары, запасы которых на определенную сумму (цена * количество):</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> Price * ProductCount BETWEEN 90000 AND 150000;</span>
+        </pre>
+      </div>
+
+      <h3>Оператор LIKE</h3>
+
+      <p>Оператор <b>LIKE</b> принимает шаблон строки, которому должно соответствовать выражение.</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">WHERE</span><span class="sql"> выражение [NOT] LIKE шаблон_строки</span>
+        </pre>
+      </div>
+
+      <p>Для определения шаблона могут применяться ряд специальных символов подстановки:</p>
+
+      <ul>
+        <li>
+            %: соответствует любой подстроке, которая может иметь любое количество символов, при этом подстрока может и не содержать ни одного символа
+            <br>
+            Например, выражение WHERE ProductName LIKE 'Galaxy%' соответствует таким значениям как "Galaxy Ace 2" или "Galaxy S7"
+        </li>
+
+        <li>
+            _: соответствует любому одиночному символу
+            <br>
+            Например, выражение WHERE ProductName LIKE 'Galaxy S_' соответствует таким значениям как "Galaxy S7" или "Galaxy S8".
+        </li>
+      </ul>
+
+      <p>Применим оператор LIKE:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span><span class="sql"> *</span><span class="sql-keyword"> FROM</span><span class="sql"> Products</span>
+            <span class="line-number">2</span> <span class="sql-keyword">WHERE</span><span class="sql"> ProductName LIKE <span style="color: red;">'iPhone%'</span>;</span>
+        </pre>
+      </div>
+
+      <img src="assets/images/postgres4.3_4.png" alt="LIKE">
+
+    </main>
+  </div>
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter4_3.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter4_5.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>

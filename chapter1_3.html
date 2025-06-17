@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глава 1</title>
+    <link rel="stylesheet" href="assets/css/styl.css">
+</head>
+<body>
+
+    <header>
+        <img src="assets/images/logomini.png" alt="PostgreSQL Logo" class="logo" height="70px">
+        <a href="index.html" class="home-link">Вернуться на главную страницу →</a>
+    </header>
+
+  <div class="container">
+    <nav class="sidebar">
+      <h3>Глава 1. Введение в PostgreSQL</h3>
+      <ul>
+        <li><a href="chapter1.html"> <b> 1. Что такое PostgreSQL? Установка сервера</b></a></li>
+        <li><a href="chapter1_2.html">2. Графический клиент pgAdmin</a></li>
+        <li><a href="chapter1_3.html">3. Запросы SQL в pgAdmin</a></li>
+        <li><a href="chapter1_4.html">4. Консольный клиент psql</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+      <h1>Запросы SQL в pgAdmin</h1>
+      <p>
+        Как правило, работа с базой данных осуществляется с помощью специального языка запросов - SQL. Рассмотрим, как выполнять простейшие SQL-запросы к базе данных в pgAdmin.
+      </p>
+
+      <p>К примеру, возьмем базу данных test1, которая была создана в прошлой теме (или создадим новую) и добавим в нее таблицу и некоторые начальные данные. Для этого нажмем в правой части окна pgAdmin на базу данных правой кнопкой мыши и в появившемся контекстном меню выберем пункт Query Tool:</p>
+
+      <img src="assets/images/postgres1_3.png" alt="Query Tool" class="screenshot" />
+
+      <p>После этого в центральной части программы откроется поле для ввода кода SQL. Введем следующий набор выражений:</p>
+
+    <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">CREATE TABLE</span> <span class="sql">users</span>
+            <span class="line-number">2</span> <span class="sql">(</span>
+            <span class="line-number">3</span> <span class="sql">Id SERIAL</span><span class="sql-keyword">PRIMARY KEY</span><span class="sql">,</span>
+            <span class="line-number">4</span> <span class="sql-keyword">Name CHARACTER VARYING</span><span class="sql">(30),</span>
+            <span class="line-number">5</span> <span class="sql">Age</span><span class="sql-keyword">INTEGER</span>
+            <span class="line-number">6</span> <span class="sql">);</span>
+            <span class="line-number">7</span> <span class="sql-keyword">INSERT INTO</span><span class="sql">users (</span><span class="sql-keyword">Name</span><span class="sql">, Age)</span><span class="sql-keyword">VALUES</span><span class="sql">('Tom', 33);</span>
+        </pre>
+    </div>
+
+      <img src="assets/images/postgres2_3.png" alt="Поле для ввода" class="screenshot" />
+
+      <p>Фактически весь код разбивается на две части. Первая часть - инструкция CREATE TABLE, которая создает таблицу users с тремя столбцами Id, Name и Age. И вторая часть - инструкция INSERT, которая добавляет в таблицу одну строку.</p>
+
+      <p>Чтобы выполнить данные инструкции, нажмем над кодом в панели инструментов на стрелочку. И после этого в выбранную базу данных (test1) будет добавлена таблица users, в которую будет добавлена одна строка.</p>
+
+      <p>Впоследствии подобным образом будет выполняться любой другой код SQL к базе данных. Также выбирается нужная база данных, выбирается параметр Query Tool, и далее в поле ввода вводится код SQL, который затем выполняется.</p>
+
+      <p>Следует отметить, что для каждой таблицы определяется схема. По умолчанию это схема "public". Поэтому чтобы найти таблицу, нам надо обратиться к узлу базы данных, раскрыть его, далее выбрать подузел Schemas, в нем подузел public (название схема), и далее в нем подузел Tables, который представляет все таблицы, ассоциированные со схемой public:</p>
+
+      <img src="assets/images/postgres3_3.png" alt="Cхема"/>
+
+      <p>Теперь получим данные из таблицы, которые были добавлены при ее создании. Для этого выполним следующий код:</p>
+
+      <div class="code-block">
+        <pre>
+            <span class="line-number">1</span> <span class="sql-keyword">SELECT</span> <span class="sql">*</span><span class="sql-keyword">FROM</span><span class="sql">users</span>
+        </pre>
+    </div>
+
+      <p>И внизу программы в поле Data Output мы увидим в табличном представлении те данные, которые ранее были добавлены.</p>
+
+      <img src="assets/images/postgres4_3.png" alt="Добавленые данные"/>
+
+    </main>
+  </div>
+
+
+
+  <div class="transition">
+    <button class="next" onclick="location.href='chapter1_2.html'">← Вернуться</button>
+    <button class="next" onclick="location.href='chapter1_4.html'">Дальше →</button>
+  </div>
+
+  <footer>
+    © 2025 PostgreSQL Учебный Портал. Спасибо, что учитесь с нами!
+  </footer>
+
+</body>
+</html>
