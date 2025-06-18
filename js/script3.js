@@ -7,7 +7,8 @@ const questions = [
             "RETURNING",
             "VARCHAR"
         ],
-        correct: "INSERT"
+        correct: "INSERT",
+        explanation: "Команда `INSERT INTO имя_таблицы (столбец1, столбец2, ...) VALUES (значение1, значение2, ...);` используется для добавления новых строк (записей) в таблицу."
     },
     {
         question: "Какая команда применяется для получения данных из таблицы?",
@@ -18,6 +19,7 @@ const questions = [
             "CREATE"
         ],
         correct: "SELECT",
+        explanation: "Команда `SELECT столбцы FROM имя_таблицы;` является основной командой для извлечения (выборки) данных из одной или нескольких таблиц."
     },
     {
         question: "Для чего нужен оператор WHERE?",
@@ -28,6 +30,7 @@ const questions = [
             "Получение всех столбцов"
         ],
         correct: "Фильтрация данных",
+        explanation: "Оператор (или предложение) `WHERE` используется в командах `SELECT`, `UPDATE`, `DELETE` для указания условий, которым должны соответствовать строки для их выборки, обновления или удаления. Таким образом, он фильтрует данные."
     },
     {
         question: "Для чего нужен оператор UPDATE?",
@@ -38,6 +41,7 @@ const questions = [
             "Добавление данных в таблицу"
         ],
         correct: "Обновление данных в таблице",
+        explanation: "Команда `UPDATE имя_таблицы SET столбец1 = значение1, столбец2 = значение2, ... WHERE условие;` используется для изменения существующих данных в строках таблицы, которые удовлетворяют указанному условию."
     },
     {
         question: "Какая команда применяется для удаления?",
@@ -48,6 +52,7 @@ const questions = [
             "WHERE"
         ],
         correct: "DELETE",
+        explanation: "Команда `DELETE FROM имя_таблицы WHERE условие;` используется для удаления строк из таблицы, которые соответствуют указанному условию в предложении `WHERE`. Если `WHERE` отсутствует, удаляются все строки таблицы."
     }
 ];
 
@@ -106,7 +111,7 @@ function handleAnswer(event) {
     quizBox.innerHTML = `
         <div class="question"><strong>Вопрос ${currentQuestion + 1}:</strong> ${q.question}</div>
         <div><strong>Ваш ответ:</strong> ${userAnswer}</div>
-        <div><strong>${isCorrect ? "✅ Верно!" : "❌ Неверно."}</strong></div>
+        <div><strong>${isCorrect ? "✅ Верно!" : `❌ Неверно. Правильный ответ: ${q.correct}`}</strong></div>
         <div><em>${q.explanation}</em></div>
         <button id="next-btn">Далее</button>
     `;
@@ -127,9 +132,9 @@ function showResult() {
     const percent = Math.round((score / questions.length) * 100);
     let message = "";
 
-    if (score === 5) {
+    if (score === questions.length) { // Динамическое определение общего количества вопросов
         message = "Отлично!";
-    } else if (score >= 3) {
+    } else if (score >= Math.ceil(questions.length * 0.6)) { // Например, 60% правильных - хороший результат
         message = "Хороший результат.";
     } else {
         message = "Повторите тему)";

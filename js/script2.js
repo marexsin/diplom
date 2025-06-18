@@ -7,7 +7,8 @@ const questions = [
             "CREATE DATABASE",
             "DROP DATABASE"
         ],
-        correct: "DROP DATABASE"
+        correct: "DROP DATABASE",
+        explanation: "Команда `DROP DATABASE имя_базы_данных;` используется для полного удаления существующей базы данных вместе со всеми ее объектами."
     },
     {
         question: "Какой логический тип может хранить одно из двух значений: true или false?",
@@ -18,6 +19,7 @@ const questions = [
             "path"
         ],
         correct: "boolean",
+        explanation: "Тип данных `boolean` (или `bool`) предназначен для хранения логических значений: `TRUE` (истина), `FALSE` (ложь) или `NULL` (неопределенное значение)."
     },
     {
         question: "Что делает атрибут PRIMARY KEY?",
@@ -28,6 +30,7 @@ const questions = [
             "Задает ограничение для диапазона значений"
         ],
         correct: "Уникально идентифицирует строку в таблице",
+        explanation: "Ограничение `PRIMARY KEY` (первичный ключ) гарантирует, что значения в указанном столбце (или группе столбцов) уникальны и не равны `NULL`, что позволяет однозначно идентифицировать каждую запись в таблице."
     },
     {
         question: "Что используется для связи между таблицами?",
@@ -38,16 +41,18 @@ const questions = [
             "SET DEFAULT"
         ],
         correct: "Внешние ключи",
+        explanation: "Внешние ключи (`FOREIGN KEY`) используются для установления и поддержания ссылочной целостности между таблицами. Они связывают столбец (или столбцы) в одной таблице со столбцом (обычно первичным ключом) в другой таблице."
     },
     {
         question: "Для чего используется ALTER TABLE?",
         options: [
-            "Дубировать таблицу",
+            "Дублировать таблицу",
             "Добавить столбец",
             "Изменять уже имеющуюся таблицу",
             "Переименование таблицы"
         ],
         correct: "Изменять уже имеющуюся таблицу",
+        explanation: "Команда `ALTER TABLE` позволяет модифицировать структуру существующей таблицы. С ее помощью можно добавлять, изменять или удалять столбцы, добавлять или удалять ограничения, переименовывать таблицу и т.д."
     }
 ];
 
@@ -103,10 +108,11 @@ function handleAnswer(event) {
     const isCorrect = userAnswer.trim().toLowerCase() === q.correct.trim().toLowerCase();
     if (isCorrect) score++;
 
+    // Добавлено отображение правильного ответа, если ответ неверный
     quizBox.innerHTML = `
         <div class="question"><strong>Вопрос ${currentQuestion + 1}:</strong> ${q.question}</div>
         <div><strong>Ваш ответ:</strong> ${userAnswer}</div>
-        <div><strong>${isCorrect ? "✅ Верно!" : "❌ Неверно."}</strong></div>
+        <div><strong>${isCorrect ? "✅ Верно!" : `❌ Неверно. Правильный ответ: ${q.correct}`}</strong></div>
         <div><em>${q.explanation}</em></div>
         <button id="next-btn">Далее</button>
     `;
@@ -127,9 +133,9 @@ function showResult() {
     const percent = Math.round((score / questions.length) * 100);
     let message = "";
 
-    if (score === 5) {
+    if (score === questions.length) { // Изменено для общего случая
         message = "Отлично!";
-    } else if (score >= 3) {
+    } else if (score >= Math.ceil(questions.length * 0.6)) { // Например, 60% правильных - хороший результат
         message = "Хороший результат.";
     } else {
         message = "Повторите тему)";
