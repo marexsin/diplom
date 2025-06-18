@@ -180,7 +180,7 @@ function showResult() {
     <p><strong>Совет:</strong> Попробуйте выполнить запросы на соединение таблиц и операции над множествами в pgAdmin на практике, чтобы лучше усвоить материал.</p>
     <div class="navigation-buttons">
         <button onclick="location.href='chapter6_7.html'" class="nav-button">Вернуться к теории</button>
-        <button onclick="location.href='chapter7.html'" class="nav-button">Следующий курс</button>
+        <button onclick="location.href='index.html'" class="nav-button">Вернуться на главную</button>
     </div>
 `;
 }
